@@ -1,0 +1,36 @@
+<h1 mat-dialog-title [innerHtml]="getCartTitle()"></h1>
+<div mat-dialog-content>
+  <div class="container">
+    <mat-card class="row m-2" *ngFor="let cartItem of hotelService.shpCartItems">
+      <img class="img-fluid mx-auto col-4 d-inline-block hotel-img" mat-card-image [src]="cartItem.room.imgPath"
+           [alt]="cartItem.room.name">
+      <div class="col-8 d-inline-block w-100">
+        <div class="row d-inline-block w-100">
+          <mat-card-header class="w-100">
+            <mat-card-title class="my-card-header text-nowrap col-8">{{cartItem.room.name}}</mat-card-title>
+            <div class="text-right w-100">
+              <button mat-icon-button class="d-inline-block" color="warn" (click) = "onClickDeleteCartItem(cartItem)">
+                <mat-icon aria-label="Delete Cart Item">delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+        </div>
+        <mat-card-content class="card-text my-card-text">
+          <li class="hotel-detail">{{getCartItemCount(cartItem)}}</li>
+          <li class="font-weight-normal d-block">Total Price : <span class="font-weight-bold">{{(cartItem.room.price * cartItem.count) | currency:''}}</span>
+          </li>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="cart-price mt-2">
+  <p class="font-weight-bold"><span>Total Price : </span>{{getTotalPriceForCart(hotelService.shpCartItems) | currency: ''}}</p>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClickCancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="'success'" cdkFocusInitial color="primary">Continue Shopping</button>
+</div>
+

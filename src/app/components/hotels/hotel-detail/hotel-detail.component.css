@@ -1,0 +1,30 @@
+.my-card-header{
+  font-size: 24px !important;
+  padding-top: 5px;
+}
+
+.hotel-detail{
+  list-style: none;
+  font-size: 12px;
+}
+
+.my-card-text{
+  margin-left: 25px;
+}
+
+.room-type{
+  margin-top:15px;
+}
+
+.room-amanties{
+  margin-top: 15px;
+}
+
+.hotel-img{
+  object-fit: contain;
+  height: 100%;
+}
+
+.room-select{
+  padding-top: 5px;
+}

@@ -1,0 +1,35 @@
+.my-hotel-card{
+  border: none;
+  padding: 10px;
+}
+
+.my-hotel-card-image{
+  height: 60%;
+}
+
+.hotel-card{
+  height: 100%;
+}
+
+.hotel-img{
+  object-fit: cover;
+  height: 100%;
+}
+
+.hotel-detail{
+  list-style: none;
+  font-size: 10px;
+}
+
+.my-card-header{
+  padding-top: 5px;
+  word-wrap: initial;
+}
+
+.hotel-email{
+  word-wrap: initial;
+}
+
+.card-text{
+  margin-bottom: 5px !important;
+}

@@ -1,0 +1,27 @@
+<div class="container">
+  <form class="form-control text-center search-form">
+    <div class="row">
+      <div class="col-4">
+        <mat-form-field>
+          <input type="text" placeholder="City" aria-label="Number" matInput [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onLocationChanged($event)">
+            <mat-option *ngFor="let location of filteredLocations | async" [value]="location  | titlecase">
+              {{location}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker startView="date" [startAt]="startDate"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="col-4 search-btn">
+        <button mat-raised-button (click)="onClickSearchBtn()" color="primary">Search</button>
+      </div>
+    </div>
+  </form>
+</div>

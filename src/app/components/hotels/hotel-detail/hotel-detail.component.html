@@ -1,0 +1,39 @@
+<div class="container p-4">
+  <mat-card class="row" *ngFor="let hotelRoom of selectedHotel.rooms">
+    <img class="img-fluid mx-auto col-4 d-inline-block hotel-img" mat-card-image [src]="hotelRoom.imgPath"
+         [alt]="hotelRoom.name">
+    <div class="col-4 d-inline-block">
+      <mat-card-header class="col-4 d-inline-block">
+        <mat-card-title class="my-card-header text-nowrap">{{hotelRoom.name}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-text my-card-text">
+        <li class="hotel-detail">{{hotelRoom.description}}</li>
+        <div class="d-block room-type">
+          <mat-chip-list class="d-inline-block" *ngFor="let roomType of hotelRoom.roomBasis">
+            <mat-chip class="font-weight-bold mr-2 mb-2">{{roomType}}</mat-chip>
+          </mat-chip-list>
+        </div>
+        <div class="d-block room-amanties">
+          <mat-chip-list class="d-inline-block" *ngFor="let facility of hotelRoom.facilities">
+            <mat-chip class="font-weight-light mr-2 mb-2">{{facility}}</mat-chip>
+          </mat-chip-list>
+        </div>
+      </mat-card-content>
+    </div>
+    <div class="col-4 d-inline-block">
+      <mat-card-actions>
+        <mat-form-field>
+          <mat-select class="d-block" placeholder="Roome Count" (selectionChange)="roomCountSelected($event, hotelRoom)">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let count of roomCounts" [value]="count">{{count}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="room-select" *ngIf="countSelected[hotelRoom.id]">
+          <span class="font-weight-normal d-block pb-3">Total Price : </span>
+          <span class="font-weight-bold d-block pb-3">{{roomPrice[hotelRoom.id] | currency:''}}</span>
+          <button mat-raised-button color="primary" (click)="onClickAddCart(hotelRoom)">Add to Cart</button>
+        </div>
+      </mat-card-actions>
+    </div>
+  </mat-card>
+</div>

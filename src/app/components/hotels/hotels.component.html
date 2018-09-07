@@ -1,0 +1,24 @@
+<div class="container p-2">
+  <div class="row row-eq-height">
+    <div class="col-4 card my-hotel-card text-center" *ngFor="let hotel of filterdHotels">
+      <mat-card class="hotel-card">
+        <div class="my-hotel-card-image">
+          <img mat-card-image class="img-fluid mx-auto d-block hotel-img" [src]="hotel.imgPath" [alt]="hotel.name">
+        </div>
+        <mat-card-header>
+          <mat-card-title class="my-card-header font-weight-bold">{{hotel.name}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="card-text">
+          <a class="hotel-email" [href]="hotel.email">{{hotel.email}}</a>
+          <li class="hotel-detail font-weight-light">{{hotel.address}}</li>
+          <li class="hotel-detail font-weight-light">Starting from : <span class="font-weight-bold">{{hotel.price | currency: ''}}</span>
+          </li>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="onClickSelectRoomBtn(hotel)">Room Selection
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

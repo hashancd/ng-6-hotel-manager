@@ -1,0 +1,21 @@
+.hotel-img{
+  object-fit: contain;
+  height: 100%;
+}
+
+.hotel-detail{
+  list-style: none;
+}
+
+.my-card-text{
+  margin-left: 25px;
+}
+
+.my-card-header{
+  font-size: 24px !important;
+  padding-top: 5px;
+}
+
+.cart-price{
+  text-align: right;
+}

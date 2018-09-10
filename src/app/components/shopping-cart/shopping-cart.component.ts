@@ -1,19 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {HotelsService} from '../../services/hotels.service';
 import {ShoppingCartItem} from '../../models/shp-cart-item';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
-export class ShoppingCartComponent implements OnInit {
+export class ShoppingCartComponent implements OnInit, OnDestroy {
 
-  constructor(public hotelService: HotelsService, public cartDialogRef: MatDialogRef<ShoppingCartComponent>) {
+  public shpCartCount = 0;
+  private subscription: Subscription;
+  public shpCartItems: ShoppingCartItem[] = [];
+
+  constructor(private hotelService: HotelsService, public cartDialogRef: MatDialogRef<ShoppingCartComponent>) {
   }
 
   ngOnInit() {
+    this.subscription = this.hotelService.getShpCartCount().subscribe(count => {
+      this.shpCartCount = count;
+    });
+
+    this.subscription = this.hotelService.getShpCartItems().subscribe(cartItems => {
+      this.shpCartItems = cartItems;
+    });
   }
 
   /**
@@ -22,10 +34,10 @@ export class ShoppingCartComponent implements OnInit {
    */
   public getCartTitle(): string {
     let title: string;
-    if (this.hotelService.shpCartCount === 1) {
-      title = this.hotelService.shpCartCount + ' Item in Shopping Cart';
+    if (this.shpCartCount === 1) {
+      title = this.shpCartCount + ' Item in Shopping Cart';
     } else {
-      title = this.hotelService.shpCartCount + ' Items in Shopping Cart';
+      title = this.shpCartCount + ' Items in Shopping Cart';
     }
     return title;
   }
@@ -37,7 +49,7 @@ export class ShoppingCartComponent implements OnInit {
    */
   public getTotalPriceForCart(cartItems: ShoppingCartItem[]): number {
     let total = 0;
-    this.hotelService.shpCartItems.forEach(cartItem => {
+    this.shpCartItems.forEach(cartItem => {
       total = total + (cartItem.count * cartItem.room.price);
     });
     return total;
@@ -56,9 +68,9 @@ export class ShoppingCartComponent implements OnInit {
    * @returns {string}
    */
   public getCartItemCount(cartItem: ShoppingCartItem): string {
-    const index = this.hotelService.shpCartItems.indexOf(cartItem);
+    const index = this.shpCartItems.indexOf(cartItem);
     let itemCount: string;
-    const count = this.hotelService.shpCartItems[index].count;
+    const count = this.shpCartItems[index].count;
     if (count === 1) {
       itemCount = `${count} Room`;
     } else {
@@ -72,13 +84,14 @@ export class ShoppingCartComponent implements OnInit {
    * @param {ShoppingCartItem} cartItem
    */
   public onClickDeleteCartItem(cartItem: ShoppingCartItem) {
-    const index = this.hotelService.shpCartItems.indexOf(cartItem);
-    this.hotelService.shpCartItems.splice(index, 1);
-    this.getCartItemsCount(this.hotelService.shpCartItems);
-    this.getTotalPriceForCart(this.hotelService.shpCartItems);
+    const index = this.shpCartItems.indexOf(cartItem);
+    this.shpCartItems.splice(index, 1);
+    this.hotelService.setShpCartItems(this.shpCartItems);
+    this.getCartItemsCount(this.shpCartItems);
+    this.getTotalPriceForCart(this.shpCartItems);
     this.getCartTitle();
-    if (!(this.hotelService.shpCartItems.length > 0)) {
-      this.hotelService.isVisibleShpCart = false;
+    if (!(this.shpCartItems.length > 0)) {
+      this.hotelService.setVisibleShpCart(false);
       this.onClickCancel();
     }
   }
@@ -88,10 +101,15 @@ export class ShoppingCartComponent implements OnInit {
    * @param {ShoppingCartItem[]} cartItems
    */
   private getCartItemsCount(cartItems: ShoppingCartItem[]) {
-    this.hotelService.shpCartCount = 0;
+    this.shpCartCount = 0;
     cartItems.forEach(cartItem => {
-      this.hotelService.shpCartCount = this.hotelService.shpCartCount + cartItem.count;
+      this.shpCartCount = this.shpCartCount + cartItem.count;
     });
+    this.hotelService.setShpCartCount(this.shpCartCount);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

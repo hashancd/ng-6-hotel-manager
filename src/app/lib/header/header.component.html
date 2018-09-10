@@ -5,8 +5,8 @@
         <mat-icon (click)="onClickHomeBtn()">hotel</mat-icon>
       </div>
       <h1>{{title}}</h1>
-      <div class="pt-2 my-auto ml-auto mr-2" *ngIf="hotelService.isVisibleShpCart">
-        <mat-icon class="hotel-shpcart"[matBadge]="hotelService.shpCartCount" matBadgeColor="warn" (click)="onClickOpenCart()">shopping_cart</mat-icon>
+      <div class="pt-2 my-auto ml-auto mr-2" *ngIf="isVisibleShpCart">
+        <mat-icon class="hotel-shpcart"[matBadge]="shpCartCount" matBadgeColor="warn" (click)="onClickOpenCart()">shopping_cart</mat-icon>
       </div>
     </mat-toolbar-row>
   </mat-toolbar>

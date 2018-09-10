@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {TitleCasePipe} from '@angular/common';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {isEmpty, map, startWith} from 'rxjs/internal/operators';
 import {MatAutocompleteSelectedEvent} from '@angular/material';
 import {Router} from '@angular/router';
@@ -54,9 +54,9 @@ export class SearchComponent implements OnInit {
   public onClickSearchBtn() {
     const linkToHotelsComponent = '/hotels/' + this.selectedLocation;
     if (!this.selectedLocation) {
-      this.hotelService.selectedHotels = this.hotelList;
+      this.hotelService.setSelectedHotels(this.hotelList);
     } else {
-      this.hotelService.selectedHotels = this.filterHotels(this.selectedLocation);
+      this.hotelService.setSelectedHotels(this.filterHotels(this.selectedLocation));
     }
     this.router.navigate([linkToHotelsComponent]);
   }

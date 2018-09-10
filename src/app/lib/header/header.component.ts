@@ -1,26 +1,43 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HotelsService} from '../../services/hotels.service';
 import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {ShoppingCartComponent} from '../../components/shopping-cart/shopping-cart.component';
+import {Hotel} from '../../models/hotel';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
 
   public title = 'Hotel Manager';
+  private selectedHotel: Hotel;
+  private subscription: Subscription;
+  public isVisibleShpCart: boolean;
+  public shpCartCount = 0;
 
   constructor(public hotelService: HotelsService, private shoppingCartDialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
-    if (this.hotelService.selectedHotel != null && this.hotelService.selectedHotel.id > 0) {
-      this.title = this.hotelService.selectedHotel.name;
+    this.subscription = this.hotelService.getSelectedHotel().subscribe(hotel => {
+      this.selectedHotel = hotel;
+    });
+    this.subscription = this.hotelService.getVisibleShpCart().subscribe(isVisible => {
+      this.isVisibleShpCart = isVisible;
+    });
+    this.subscription = this.hotelService.getShpCartCount().subscribe(count => {
+      this.shpCartCount = count;
+    });
+    if (this.selectedHotel != null && this.selectedHotel.id > 0) {
+      this.title = this.selectedHotel.name;
+      this.hotelService.setVisibleShpCart(true);
     } else {
       this.title = 'Hotel Manager';
+      this.hotelService.setVisibleShpCart(false);
     }
   }
 
@@ -45,6 +62,10 @@ export class HeaderComponent implements OnInit {
   public onClickHomeBtn() {
     this.hotelService.resetService();
     this.router.navigate(['']);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }

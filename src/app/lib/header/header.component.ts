@@ -15,7 +15,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public title = 'Hotel Manager';
   private selectedHotel: Hotel;
-  private subscription: Subscription;
+  private hotelObsev: Subscription = new Subscription();
+  private cartVisibilityObsev: Subscription = new Subscription();
+  private cartCountObsev: Subscription = new Subscription();
   public isVisibleShpCart: boolean;
   public shpCartCount = 0;
 
@@ -23,13 +25,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.hotelService.getSelectedHotel().subscribe(hotel => {
+    this.hotelObsev = this.hotelService.getSelectedHotel().subscribe(hotel => {
       this.selectedHotel = hotel;
     });
-    this.subscription = this.hotelService.getVisibleShpCart().subscribe(isVisible => {
+    this.cartVisibilityObsev = this.hotelService.getVisibleShpCart().subscribe(isVisible => {
       this.isVisibleShpCart = isVisible;
     });
-    this.subscription = this.hotelService.getShpCartCount().subscribe(count => {
+    this.cartCountObsev = this.hotelService.getShpCartCount().subscribe(count => {
       this.shpCartCount = count;
     });
     if (this.selectedHotel != null && this.selectedHotel.id > 0) {
@@ -65,7 +67,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.hotelObsev.unsubscribe();
+    this.cartVisibilityObsev.unsubscribe();
+    this.cartCountObsev.unsubscribe();
   }
 
 }

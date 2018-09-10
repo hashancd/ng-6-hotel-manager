@@ -19,7 +19,9 @@ export class HotelDetailComponent implements OnInit, OnDestroy {
   public countSelected: boolean[] = [];
   public roomPrice: number[] = [];
   public selectedRooms: number[] = [];
-  private subscription: Subscription;
+  private hotelsObsev: Subscription = new Subscription();
+  private shpCartObsev: Subscription = new Subscription();
+  private shpCountObsev: Subscription = new Subscription();
   public shpCartItems: ShoppingCartItem[] = [];
   public shpCartCount = 0;
 
@@ -27,15 +29,15 @@ export class HotelDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.hotelService.getSelectedHotel().subscribe(hotel => {
+    this.hotelsObsev = this.hotelService.getSelectedHotel().subscribe(hotel => {
       this.selectedHotel = hotel;
     });
 
-    this.subscription = this.hotelService.getShpCartItems().subscribe(cartItems => {
+    this.shpCartObsev = this.hotelService.getShpCartItems().subscribe(cartItems => {
       this.shpCartItems = cartItems;
     });
 
-    this.subscription = this.hotelService.getShpCartCount().subscribe(count => {
+    this.shpCountObsev = this.hotelService.getShpCartCount().subscribe(count => {
       this.shpCartCount = count;
     });
 
@@ -100,7 +102,9 @@ export class HotelDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.hotelsObsev.unsubscribe();
+    this.shpCartObsev.unsubscribe();
+    this.shpCountObsev.unsubscribe();
   }
 
 }

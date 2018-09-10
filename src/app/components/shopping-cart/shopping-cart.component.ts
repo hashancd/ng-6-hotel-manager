@@ -12,18 +12,19 @@ import {Subscription} from 'rxjs';
 export class ShoppingCartComponent implements OnInit, OnDestroy {
 
   public shpCartCount = 0;
-  private subscription: Subscription;
+  private shpCountObsev: Subscription = new Subscription();
+  private shpCartObsev: Subscription = new Subscription();
   public shpCartItems: ShoppingCartItem[] = [];
 
   constructor(private hotelService: HotelsService, public cartDialogRef: MatDialogRef<ShoppingCartComponent>) {
   }
 
   ngOnInit() {
-    this.subscription = this.hotelService.getShpCartCount().subscribe(count => {
+    this.shpCountObsev = this.hotelService.getShpCartCount().subscribe(count => {
       this.shpCartCount = count;
     });
 
-    this.subscription = this.hotelService.getShpCartItems().subscribe(cartItems => {
+    this.shpCartObsev = this.hotelService.getShpCartItems().subscribe(cartItems => {
       this.shpCartItems = cartItems;
     });
   }
@@ -109,7 +110,8 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.shpCountObsev.unsubscribe();
+    this.shpCartObsev.unsubscribe();
   }
 
 }

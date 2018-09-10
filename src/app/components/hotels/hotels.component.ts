@@ -12,13 +12,13 @@ import {Subscription} from 'rxjs';
 export class HotelsComponent implements OnInit, OnDestroy {
 
   public filterdHotels: Hotel[] = [];
-  private subscription: Subscription;
+  private hotelsObsev: Subscription = new Subscription();
 
   constructor(private hotelService: HotelsService, private router: Router) {
   }
 
   ngOnInit() {
-    this.subscription = this.hotelService.getSelectedHotels().subscribe(hotels => {
+    this.hotelsObsev = this.hotelService.getSelectedHotels().subscribe(hotels => {
       this.filterdHotels = hotels;
     });
 
@@ -38,7 +38,7 @@ export class HotelsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.hotelsObsev.unsubscribe();
   }
 
 }
